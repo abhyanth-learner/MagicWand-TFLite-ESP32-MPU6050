@@ -38,11 +38,11 @@ if __name__ == "__main__":
   folders.append("negative")
 
   # if there are more than 10% more gesture samples per gesture as negative samples, generate additional negative
-  # samples
-  if n_gestures - n_negative * len(folders) > n_gestures/len(folders) * 0.1:
-    print("not enough negative samples available, creating random data samples")
-    generate_negative_data(data, (math.ceil(n_gestures/len(folders)) - n_negative))
-  n_negative = len(data) - n_gestures
+#   # samples
+#   if n_gestures - n_negative * len(folders) > n_gestures/len(folders) * 0.1:
+#     print("not enough negative samples available, creating random data samples")
+#     generate_negative_data(data, (math.ceil(n_gestures/len(folders)) - n_negative))
+#   n_negative = len(data) - n_gestures
 
   # print(data)
   columns = [LABEL_NAME, "name", DATA_NAME]

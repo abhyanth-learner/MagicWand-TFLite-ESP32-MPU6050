@@ -28,7 +28,7 @@ from data_split import split_data
 class TestSplit(unittest.TestCase):
   def setUp(self):  # pylint: disable=g-missing-super-call
     self.data = read_data("./data/complete_data")
-    self.num_dic = {"wing": 0, "ring": 0, "slope": 0, "negative": 0}
+    self.num_dic = {"wing": 0, "ring": 0, "slope": 0,}
     with open("./data/complete_data", "r") as f:
       lines = f.readlines()
       self.num = len(lines)
@@ -53,14 +53,11 @@ class TestSplit(unittest.TestCase):
     train_data_60, valid_data_20, test_data_20 = split_data(
         self.data, 0.6, 0.2)
     len_60 = int(self.num_dic["wing"] * 0.6) + int(
-        self.num_dic["ring"] * 0.6) + int(self.num_dic["slope"] * 0.6) + int(
-            self.num_dic["negative"] * 0.6)
+        self.num_dic["ring"] * 0.6) + int(self.num_dic["slope"] * 0.6) 
     len_50 = int(self.num_dic["wing"] * 0.5) + int(
-        self.num_dic["ring"] * 0.5) + int(self.num_dic["slope"] * 0.5) + int(
-            self.num_dic["negative"] * 0.5)
+        self.num_dic["ring"] * 0.5) + int(self.num_dic["slope"] * 0.5) 
     len_20 = int(self.num_dic["wing"] * 0.2) + int(
-        self.num_dic["ring"] * 0.2) + int(self.num_dic["slope"] * 0.2) + int(
-            self.num_dic["negative"] * 0.2)
+        self.num_dic["ring"] * 0.2) + int(self.num_dic["slope"] * 0.2) 
     self.assertEqual(len(train_data_0), 0)
     self.assertEqual(len(train_data_50), len_50)
     self.assertEqual(len(train_data_60), len_60)

@@ -47,16 +47,16 @@ class TestPrepare(unittest.TestCase):
     self.assertEqual(list(self.data[-1]), ["gesture", "accel_ms2_xyz", "name"])
     self.assertEqual(self.data[0]["name"], names[0])  # pylint: disable=undefined-variable
 
-  def test_generate_negative(self):
-    original_len = len(self.data)
-    generate_negative_data(self.data)
-    self.assertEqual(original_len + 300, len(self.data))
-    generated_num = 0
-    for idx, data in enumerate(self.data):  # pylint: disable=undefined-variable, unused-variable
-      if data["name"] == "negative6" or data["name"] == "negative7" or data[
-          "name"] == "negative8":
-        generated_num += 1
-    self.assertEqual(generated_num, 300)
+#   def test_generate_negative(self):
+#     original_len = len(self.data)
+#     generate_negative_data(self.data)
+#     self.assertEqual(original_len + 300, len(self.data))
+#     generated_num = 0
+#     for idx, data in enumerate(self.data):  # pylint: disable=undefined-variable, unused-variable
+#       if data["name"] == "negative6" or data["name"] == "negative7" or data[
+#           "name"] == "negative8":
+#         generated_num += 1
+#     self.assertEqual(generated_num, 300)
 
   def test_write_data(self):
     data_path_test = "./data/data0"
