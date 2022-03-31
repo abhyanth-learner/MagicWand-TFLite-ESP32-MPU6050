@@ -64,7 +64,7 @@ def build_cnn(seq_length):
       tf.keras.layers.Flatten(),  # (batch, 224)
       tf.keras.layers.Dense(16, activation="relu"),  # (batch, 16)
       tf.keras.layers.Dropout(0.1),  # (batch, 16)
-      tf.keras.layers.Dense(3, activation="softmax")  # (batch, 4)
+      tf.keras.layers.Dense(4, activation="softmax")  # (batch, 4)
   ])
   model_path = os.path.join("./netmodels", "CNN")
   print("Built CNN.")
@@ -80,7 +80,7 @@ def build_lstm(seq_length):
       tf.keras.layers.Bidirectional(
           tf.keras.layers.LSTM(22),
           input_shape=(seq_length, 3)),  # output_shape=(batch, 44)
-      tf.keras.layers.Dense(3, activation="sigmoid")  # (batch, 4)
+      tf.keras.layers.Dense(4, activation="sigmoid")  # (batch, 4)
   ])
   model_path = os.path.join("./netmodels", "LSTM")
   print("Built LSTM.")
