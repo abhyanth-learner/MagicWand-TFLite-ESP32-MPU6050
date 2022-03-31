@@ -51,7 +51,7 @@ def build_cnn(seq_length):
   """Builds a convolutional neural network in Keras."""
   model = tf.keras.Sequential([
       tf.keras.layers.Conv2D(
-          8, (4, 3),
+          8, (3, 3),
           padding="same",
           activation="relu",
           input_shape=(seq_length, 3, 1)),  # output_shape=(batch, 128, 3, 8)
