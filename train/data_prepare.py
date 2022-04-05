@@ -59,12 +59,12 @@ def prepare_original_data(folder, name, data, file_to_read):  # pylint: disable=
       data_new["name"] = name
       for idx, line in enumerate(lines):  # pylint: disable=unused-variable,redefined-outer-name
         if len(line) == 3:
-#           if line[2] == "-" and data_new[DATA_NAME] or (folder == "negative" and len(data_new[DATA_NAME]) == 120):
-#             data.append(data_new)
-#             data_new = {}
-#             data_new[LABEL_NAME] = folder
-#             data_new[DATA_NAME] = []
-#             data_new["name"] = name
+          if line[2] == "-" and data_new[DATA_NAME] or (folder == "negative" and len(data_new[DATA_NAME]) == 120):
+            data.append(data_new)
+            data_new = {}
+            data_new[LABEL_NAME] = folder
+            data_new[DATA_NAME] = []
+            data_new["name"] = name
           if line[2] != "-":
             data_new[DATA_NAME].append([float(i) for i in line[0:3]])
       data.append(data_new)
@@ -158,6 +158,6 @@ if __name__ == "__main__":
 #   print("negative_data_length: " + str(n_negative))
   print("data_length: " + str(len(data)))
 
-  if not os.path.exists("./data"):
-    os.makedirs("./data")
-    write_data(data, "./data/complete_data")
+#   if not os.path.exists("./data"):
+#     os.makedirs("./data")
+  write_data(data, "./data/complete_data")
