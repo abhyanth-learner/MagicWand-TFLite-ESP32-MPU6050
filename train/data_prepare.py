@@ -141,7 +141,7 @@ if __name__ == "__main__":
       prepare_original_data(folder, name, data,
                             "./data/%s/output_%s_%s.txt" % (folder, folder, name))
   n_gestures = len(data)
-  for idx, name in enumerate(names):
+#   for idx, name in enumerate(names):
 #     prepare_original_data("negative", name, data,
 
 #                           "./data/negative/output_negative_%s.txt" % (name))
