@@ -32,4 +32,8 @@ void HandleOutput(tflite::ErrorReporter* error_reporter, int kind) {
         "SLOPE:\n\r        *\n\r       *\n\r      *\n\r     *\n\r    "
         "*\n\r   *\n\r  *\n\r * * * * * * * *\n\r");
   }
+  else if (kind == 3) {
+    error_reporter->Report(
+        "Negative:-----------";
+  }
 }
