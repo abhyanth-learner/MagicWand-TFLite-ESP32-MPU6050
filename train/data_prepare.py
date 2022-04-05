@@ -158,6 +158,6 @@ if __name__ == "__main__":
 #   print("negative_data_length: " + str(n_negative))
   print("data_length: " + str(len(data)))
 
-  # if not os.path.exists("./data"):
-  #   os.makedirs("./data")
-      write_data(data, "./data/complete_data")
+  if not os.path.exists("./data"):
+    os.makedirs("./data")
+    write_data(data, "./data/complete_data")
