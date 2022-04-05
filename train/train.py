@@ -68,9 +68,9 @@ def build_cnn(seq_length):
   ])
   model_path = os.path.join("./netmodels", "CNN")
   print("Built CNN.")
-  if not os.path.exists(model_path):
-    os.makedirs(model_path)
-  model.load_weights("./netmodels/CNN/weights.h5")
+#   if not os.path.exists(model_path):
+#     os.makedirs(model_path)
+#   model.load_weights("./netmodels/CNN/weights.h5")
   return model, model_path
 
 
