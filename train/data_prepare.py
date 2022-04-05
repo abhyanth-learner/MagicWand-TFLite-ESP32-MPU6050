@@ -154,9 +154,9 @@ if __name__ == "__main__":
 #     generate_negative_data(data, (math.ceil(n_gestures/len(folders)) - n_negative))
 #   n_negative = len(data) - n_gestures
 
-#   print("gesture_data_length: " + str(n_gestures))
+  print("gesture_data_length: " + str(n_gestures))
 #   print("negative_data_length: " + str(n_negative))
-#   print("data_length: " + str(len(data)))
+  print("data_length: " + str(len(data)))
 
   # if not os.path.exists("./data"):
   #   os.makedirs("./data")
