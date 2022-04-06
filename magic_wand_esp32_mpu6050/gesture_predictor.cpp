@@ -27,15 +27,15 @@ int last_predict = -1;
 int PredictGesture(float* output) {
   // Find whichever output has a probability > 0.8 (they sum to 1)
   int this_predict = -1;
-  for (int i = 0; i < 3; i++) {
-    if (output[i] > 0.8) this_predict = i;
+  for (int i = 0; i < 2; i++) {
+    if (output[i] > 0.3) this_predict = i;
   }
   // No gesture was detected above the threshold
-  if (this_predict == -1) {
-    continuous_count = 0;
-    last_predict = 3;
-    return 3;
-  }
+//  if (this_predict == -1) {
+//    continuous_count = 0;
+//    last_predict = 3;
+//    return 3;
+//  }
   if (last_predict == this_predict) {
     continuous_count += 1;
   } else {
@@ -44,9 +44,9 @@ int PredictGesture(float* output) {
   last_predict = this_predict;
   // If we haven't yet had enough consecutive matches for this gesture,
   // report a negative result
-  if (continuous_count < kConsecutiveInferenceThresholds[this_predict]) {
-    return 3;
-  }
+//  if (continuous_count < kConsecutiveInferenceThresholds[this_predict]) {
+//    return 3;
+//  }
   // Otherwise, we've seen a positive result, so clear all our variables
   // and report it
   continuous_count = 0;
