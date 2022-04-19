@@ -34,6 +34,6 @@ void HandleOutput(tflite::ErrorReporter* error_reporter, int kind) {
   }
   else if (kind == 3) {
     error_reporter->Report(
-        "Negative:-----------";
+        "Negative:-----------");
   }
 }
