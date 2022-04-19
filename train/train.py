@@ -21,6 +21,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+
 import argparse
 import datetime
 import os
@@ -71,6 +72,7 @@ def build_cnn(seq_length):
 #   if not os.path.exists(model_path):
 #     os.makedirs(model_path)
 #   model.load_weights("./netmodels/CNN/weights.h5")
+  
   return model, model_path
 
 
@@ -151,6 +153,10 @@ def train_net(
                                        num_classes=3)
   print(confusion)
   print("Loss {}, Accuracy {}".format(loss, acc))
+ 
+  tf.keras.models.save_model(
+    model, 'original.h5', overwrite=True, include_optimizer=True, save_format='h5',
+    signatures=None, options=None)
   # Convert the model to the TensorFlow Lite format without quantization
   converter = tf.lite.TFLiteConverter.from_keras_model(model)
   tflite_model = converter.convert()
@@ -197,5 +203,5 @@ if __name__ == "__main__":
   print("Start training...")
   train_net(model, model_path, train_len, train_data, valid_len, valid_data,
             test_len, test_data, args.model)
-
+ 
   print("Training finished!")
