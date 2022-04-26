@@ -5,12 +5,15 @@
 #define SDA_PIN 21
 #define SCL_PIN 22
 #define I2C_SLAVE_ADDR 0x04
-
+float Final_data[10];
+int i=0;
+String rx_data = "";
+String data="";
 void receiveEvent(int howMany);
 
 void setup()
 {
-    Serial.begin(9600);
+    Serial.begin(115200);
 
     bool success = WireSlave.begin(SDA_PIN, SCL_PIN, I2C_SLAVE_ADDR);
     if (!success) {
@@ -31,12 +34,35 @@ void loop()
 }
 void receiveEvent(int howMany)
 {
-//    while (1 < WireSlave.available()) 
-//    {
-//        char c = WireSlave.read();  
-//        Serial.print(c);            
-//    }
+    while (1 < WireSlave.available()) 
+    {
 
-    int x = WireSlave.read();   
-    Serial.println(x);          
+        rx_data=(char)WireSlave.read();
+//        Serial.print("data");
+//        Serial.println(rx_data);
+        if(rx_data!=",")
+        {
+          data.concat(rx_data);
+        }
+         else{
+         // Serial.println(data);
+               Final_data[i]=data.toFloat();
+          data="";
+          i=i+1;
+          } 
+
+     
+     //Serial.println(data);
+     rx_data = "";
+
+    }
+    for(int j=0;i<sizeof(Final_data);i++){
+     Serial.println(Final_data[j]);  
+    } 
+    Serial.print("i is");
+    Serial.println(i);
+//    int x = WireSlave.read();   
+//    Serial.println(x);  
+//    Serial.print(rx_data);
+        
 }
