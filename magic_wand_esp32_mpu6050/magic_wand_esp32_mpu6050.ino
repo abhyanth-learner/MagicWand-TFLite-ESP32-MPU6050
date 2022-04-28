@@ -12,11 +12,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
-
 #include <TensorFlowLite_ESP32.h>
-
 #include "main_functions.h"
-
 #include "accelerometer_handler.h"
 #include "gesture_predictor.h"
 #include "magic_wand_model_data.h"
@@ -28,7 +25,20 @@ limitations under the License.
 #include "tensorflow/lite/experimental/micro/kernels/all_ops_resolver.h"
 #include "tensorflow/lite/schema/schema_generated.h"
 #include "tensorflow/lite/version.h"
-
+#include <Arduino.h>
+#include <Wire.h>
+#include <WireSlave.h>
+#define SDA_PIN 21
+#define SCL_PIN 22
+#define I2C_SLAVE_ADDR 0x04
+String rx_data = "";
+String x="";
+String y="";
+String z="";
+float x_final[10];
+float y_final[10];
+float z_final[10];
+void receiveEvent(int howMany);
 // Globals, used for compatibility with Arduino-style sketches.
 namespace {
 tflite::ErrorReporter* error_reporter = nullptr;
@@ -49,6 +59,14 @@ bool should_clear_buffer = false;
 
 // The name of this function is important for Arduino compatibility.
 void setup() {
+  Serial.begin(115200);
+      bool success = WireSlave.begin(SDA_PIN, SCL_PIN, I2C_SLAVE_ADDR);
+    if (!success) {
+        Serial.println("I2C slave failed");
+        while(1) delay(100);
+    }
+
+    WireSlave.onReceive(receiveEvent);
   // Set up logging. Google style is to avoid globals or statics because of
   // lifetime uncertainty, but since this has a trivial destructor it's okay.
   static tflite::MicroErrorReporter micro_error_reporter;  // NOLINT
@@ -116,6 +134,8 @@ void setup() {
 }
 
 void loop() {
+  WireSlave.update();
+  delay(1);
   // Attempt to read new data from the accelerometer
   bool got_data = ReadAccelerometer(error_reporter, model_input->data.f,
                                     input_length, should_clear_buffer);
