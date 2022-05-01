@@ -12,11 +12,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
-
 #include <TensorFlowLite_ESP32.h>
-
 #include "main_functions.h"
-
 #include "accelerometer_handler.h"
 #include "gesture_predictor.h"
 #include "magic_wand_model_data.h"
@@ -28,7 +25,20 @@ limitations under the License.
 #include "tensorflow/lite/experimental/micro/kernels/all_ops_resolver.h"
 #include "tensorflow/lite/schema/schema_generated.h"
 #include "tensorflow/lite/version.h"
-
+#include <Arduino.h>
+#include <Wire.h>
+#include <WireSlave.h>
+#define SDA_PIN 21
+#define SCL_PIN 22
+#define I2C_SLAVE_ADDR 0x04
+String rx_data = "";
+String x="";
+String y="";
+String z="";
+float x_final;
+float y_final;
+float z_final;
+void receiveEvent(int howMany);
 // Globals, used for compatibility with Arduino-style sketches.
 namespace {
 tflite::ErrorReporter* error_reporter = nullptr;
@@ -49,6 +59,14 @@ bool should_clear_buffer = false;
 
 // The name of this function is important for Arduino compatibility.
 void setup() {
+  Serial.begin(115200);
+      bool success = WireSlave.begin(SDA_PIN, SCL_PIN, I2C_SLAVE_ADDR);
+    if (!success) {
+        Serial.println("I2C slave failed");
+        while(1) delay(100);
+    }
+
+    WireSlave.onReceive(receiveEvent);
   // Set up logging. Google style is to avoid globals or statics because of
   // lifetime uncertainty, but since this has a trivial destructor it's okay.
   static tflite::MicroErrorReporter micro_error_reporter;  // NOLINT
@@ -103,29 +121,35 @@ void setup() {
       (model_input->dims->data[1] != 128) ||
       (model_input->dims->data[2] != kChannelNumber) ||
       (model_input->type != kTfLiteFloat32)) {
+        Serial.println("checkpoint5");
     error_reporter->Report("Bad input tensor parameters in model");
     return;
   }
 
   input_length = model_input->bytes / sizeof(float);
 
-  TfLiteStatus setup_status = SetupAccelerometer(error_reporter);
-  if (setup_status != kTfLiteOk) {
-    error_reporter->Report("Set up failed\n");
-  }
+//  TfLiteStatus setup_status = SetupAccelerometer(error_reporter);
+//  if (setup_status != kTfLiteOk) {
+//    error_reporter->Report("Set up failed\n");
+//  }
 }
 
 void loop() {
+  WireSlave.update();
+  delay(1);
   // Attempt to read new data from the accelerometer
   bool got_data = ReadAccelerometer(error_reporter, model_input->data.f,
-                                    input_length, should_clear_buffer);
+                                    input_length, should_clear_buffer,x_final,y_final,z_final);
+   delay(1000);                                 
   // Don't try to clear the buffer again
   should_clear_buffer = false;
+  //Serial.println(got_data);
   // If there was no new data, wait until next time
   if (!got_data) return;
   // Run inference, and report any error
   TfLiteStatus invoke_status = interpreter->Invoke();
   if (invoke_status != kTfLiteOk) {
+    Serial.println("checkpoint6");
     error_reporter->Report("Invoke failed on index: %d\n", begin_index);
     return;
   }
@@ -135,4 +159,73 @@ void loop() {
   should_clear_buffer = gesture_index < 3;
   // Produce an output
   HandleOutput(error_reporter, gesture_index);
+}
+void receiveEvent(int howMany)
+{
+    
+
+        rx_data=(char)WireSlave.read();
+//        Serial.print("Recived data:");
+//        Serial.println(rx_data);
+        if(rx_data=="x")
+        {
+          while (1 < WireSlave.available()) 
+          {
+              rx_data=(char)WireSlave.read();
+              x.concat(rx_data);
+           }
+           //Serial.println(x);
+           x_final=x.toFloat();
+           x="";
+        }
+        if(rx_data=="y")
+        {
+          while (1 < WireSlave.available()) 
+          {
+              rx_data=(char)WireSlave.read();
+              y.concat(rx_data);
+           }
+           y_final=y.toFloat();
+           y="";
+        }
+        if(rx_data=="z")
+        {
+          while (1 < WireSlave.available()) 
+          {
+              rx_data=(char)WireSlave.read();
+              z.concat(rx_data);
+           }
+           z_final=z.toFloat();
+           z="";
+        }
+ 
+
+        
+//        Serial.println(x_final);
+////        
+//        Serial.println(y_final);
+////        
+//        Serial.println(z_final);
+//         else{
+//         // Serial.println(data);
+//               Final_data[i]=data.toFloat();
+//          data="";
+//          i=i+1;
+//          } 
+
+     
+     //Serial.println(data);
+//     rx_data = "";
+//
+//    }
+//    for(int j=0;j<sizeof(Final_data);j++){
+//     Serial.println(Final_data[j]);  
+//    } 
+//    i=0;
+//    Serial.print("i is");
+//    Serial.println(i);
+//    int x = WireSlave.read();   
+//    Serial.println(x);  
+//    Serial.print(rx_data);
+        
 }
