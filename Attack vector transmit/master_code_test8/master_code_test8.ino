@@ -6,7 +6,7 @@
 #define SCL_PIN 22
 #define I2C_SLAVE_ADDR 0x04
 String y;
-char buf[10];
+char buf[50];
 char ch = 0;
 char i = 0;
 void setup()
@@ -25,7 +25,7 @@ void loop()
         y = Serial.readString();
 //        Serial.print(y);
 
-        y.toCharArray(buf, 10);
+        y.toCharArray(buf, 50);
 //        Serial.println(y[0]);
 //        packer.write(y[0]);
 //        packer.end();
